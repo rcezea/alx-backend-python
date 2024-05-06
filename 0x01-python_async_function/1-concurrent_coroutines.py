@@ -7,17 +7,10 @@ wait_random = __import__('0-basic_async_syntax').wait_random
 
 
 async def wait_n(n: int, max_delay: int) -> List[float]:
-    """
-    Return a list of all the delays (float values).
-
-    Args:
-        n (int): The number of coroutines to execute.
-        max_delay (int): The maximum delay for each coroutine.
-
-    Returns:
-        List[float]: Sorted list of delay values.
-    """
-    arr = []
+    """Return the list of all the delays (float values)"""
+    arr: List[float] = []
     for _ in range(n):
-        arr.append(await wait_random(max_delay))
+        result = (await asyncio.gather(wait_random(max_delay)))[0]
+        if isinstance(result, float):
+            arr.append(result)
     return sorted(arr)
