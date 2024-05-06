@@ -7,7 +7,6 @@ wait_random = __import__('0-basic_async_syntax').wait_random
 
 
 async def wait_n(n: int, max_delay: int) -> List[float]:
-    """Run multiple coroutines in one module"""
-    delay: List[float] = [wait_random(max_delay) for _ in range(n)]
-    await asyncio.gather(*delay)
-    return sorted(delay)
+    """return the list of all the delays (float values)"""
+    return sorted(await asyncio.gather(*(wait_random(max_delay)
+                                         for _ in range(n))))
