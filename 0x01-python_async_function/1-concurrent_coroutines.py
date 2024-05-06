@@ -10,5 +10,5 @@ async def wait_n(n: int, max_delay: int) -> List[float]:
     """Run multiple coroutines in one module"""
     arr: List[float] = []
     for _ in range(n):
-        arr.append(*(await wait_random(max_delay)))
+        arr.append(await wait_random(max_delay))
     return sorted(arr)
