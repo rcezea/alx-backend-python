@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""This module demonstrates executing multiple coroutines concurrently using async."""
+"""This module demonstrates executing multiple coroutines using async."""
 import asyncio
 from typing import List
 
