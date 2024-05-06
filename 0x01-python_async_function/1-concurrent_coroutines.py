@@ -5,11 +5,11 @@ import asyncio
 wait_random = __import__('0-basic_async_syntax').wait_random
 
 
-async def wait_n(n: int, max_delay: int) -> list:
+async def wait_n(n: int, max_delay: int) -> list[float]:
     """Run multiple coroutines in one module"""
-    arr: list = []
+    arr: list[float] = [float]
     for i in range(n):
-        delay: tuple = await asyncio.gather(wait_random(max_delay))
+        delay: tuple[float] = await asyncio.gather(wait_random(max_delay))
         arr.append(*delay)
 
     return sorted(arr)
