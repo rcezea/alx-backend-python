@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 """Let's execute multiple coroutines at the same time with async"""
 import asyncio
-import importlib
+import random
 
-module_name = importlib.import_module("0-basic_async_syntax")
-wait_random = module_name.wait_random
+
+async def wait_random(max_delay: int = 10) -> float:
+    """A function to show an asynchronous coroutine"""
+    time: float = random.uniform(0, max_delay + 1)
+    await asyncio.sleep(time)
+    return time
 
 
 async def wait_n(n: int, max_delay: int) -> list:
