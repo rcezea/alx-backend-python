@@ -19,7 +19,7 @@ async def wait_n(n: int, max_delay: int) -> List[float]:
     """
     arr = []
     for _ in range(n):
-        result = tuple(await asyncio.gather(wait_random(max_delay)))
+        result = (await asyncio.gather(wait_random(max_delay)))[0]
         if isinstance(result, float):
             arr.append(result)
     return sorted(arr)
