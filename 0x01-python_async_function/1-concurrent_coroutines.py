@@ -7,7 +7,7 @@ module_name = importlib.import_module("0-basic_async_syntax")
 wait_random = module_name.wait_random
 
 
-async def wait_n(n: int, max_delay: int) -> list[float]:
+async def wait_n(n: int, max_delay: int) -> list:
     """Run multiple coroutines in one module"""
     arr: list = []
     for i in range(n):
