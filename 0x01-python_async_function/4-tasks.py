@@ -9,22 +9,9 @@ task_wait_random = __import__('3-tasks').task_wait_random
 
 async def task_wait_n(n: int, max_delay: int) -> List[float]:
     """Return the list of all the delays (float values)"""
-    # Create a list to store coroutine objects
-    coroutines: List[asyncio.Task] = []
-
-    # Generate coroutine objects for each task_wait_random call
+    arr: List[float] = []
     for _ in range(n):
-        coroutine: asyncio.Task = task_wait_random(max_delay)
-        coroutines.append(coroutine)
-
-    # Wait for all coroutines to complete and gather their results
-    results: List[float] = []
-    for result in await asyncio.gather(*coroutines):
+        result = (await asyncio.gather(task_wait_random(max_delay)))[0]
         if isinstance(result, float):
-            results.append(result)
-
-    # Sort the results in ascending order
-    sorted_results: List[float] = sorted(results)
-
-    # Return the sorted list of delays
-    return sorted_results
+            arr.append(result)
+    return sorted(arr)
