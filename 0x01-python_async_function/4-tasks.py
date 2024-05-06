@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-"""Create a new function to alter wait_n"""
+"""list of all the delays"""
+
 import asyncio
-from typing import List, Tuple
+from typing import List
 
 task_wait_random = __import__('3-tasks').task_wait_random
 
