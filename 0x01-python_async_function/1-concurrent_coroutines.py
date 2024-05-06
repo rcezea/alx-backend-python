@@ -8,7 +8,7 @@ wait_random = module_name.wait_random
 
 
 async def wait_n(n: int, max_delay: int) -> list[float]:
-    """Run multiple coroutines"""
+    """Run multiple coroutines in one module"""
     arr: list = []
     for i in range(n):
         delay: tuple = await asyncio.gather(wait_random(max_delay))
