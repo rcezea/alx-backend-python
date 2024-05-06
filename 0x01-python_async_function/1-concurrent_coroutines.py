@@ -11,11 +11,4 @@ async def wait_n(n: int, max_delay: int) -> List[float]:
     for i in range(n):
         delay: Tuple[float] = await asyncio.gather(wait_random(max_delay))
         arr.append(*delay)
-
-    for x in range(len(arr)):
-        for i in range(x + 1, len(arr)):
-            if arr[x] > arr[i]:
-                arr[x], arr[i] = arr[i], arr[x]
-                print(arr)
-
-    return arr
+    return sorted(arr)
