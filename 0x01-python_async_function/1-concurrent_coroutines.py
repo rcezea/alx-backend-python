@@ -10,5 +10,5 @@ async def wait_n(n: int, max_delay: int) -> List[float]:
     """
     Return a list of all the delays (float values).
     """
-    arr = tuple(await asyncio.gather(*[wait_random(max_delay) for _ in range(n)]))
-    return sorted(arr)
+    todos = [asyncio.create_task(wait_random(max_delay)) for _ in range(n)]
+    return [await todo for todo in asyncio.as_completed(todos)]
