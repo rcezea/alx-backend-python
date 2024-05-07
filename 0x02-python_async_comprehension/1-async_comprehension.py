@@ -11,5 +11,3 @@ async def async_comprehension() -> List[float]:
     async for i in async_generator():
         result.append(i)
     return result
-
-asyncio.run(async_comprehension())
