@@ -63,6 +63,7 @@ def insert_data(connection, data):
     LOAD DATA LOCAL INFILE '{data}'
         INTO TABLE user_data
         FIELDS TERMINATED BY ','
+        ENCLOSED BY '"'
         LINES TERMINATED BY '\\n'
         IGNORE 1 LINES
         (name,email,age)
