@@ -5,14 +5,9 @@ def stream_users():
     seed = __import__('seed')
 
     connection = seed.connect_to_prodev()
-
     cursor = connection.cursor()
 
-    query = 'SELECT * FROM user_data'
+    cursor.execute('SELECT * FROM user_data')
 
-    cursor.execute(query)
-
-    result = cursor.fetchall()
-
-    for row in result:
+    for row in cursor:
         yield row
