@@ -20,6 +20,6 @@ def calculate_average():
     """ Compute the average age of users. """
     average = 0
     num = 0
-    for num, age in enumerate(stream_user_ages(), start=1):
-        average += age["age"]
+    for num, row in enumerate(stream_user_ages(), start=1):
+        average += row["age"]
     return average/num
