@@ -9,7 +9,7 @@ from datetime import datetime
 
 def log_queries(f):
     """ log the SQL query before executing it. """
-    functools.wraps(f)
+    @functools.wraps(f)
     def wrapper_log_queries(*args, **kwargs):
         print(f'[{ datetime.now()}] SQL Query: {kwargs.get("query")}')
         return f(*args, **kwargs)
