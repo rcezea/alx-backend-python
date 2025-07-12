@@ -1,9 +1,23 @@
 #!/usr/bin/python3
 
-from sqlite3 import DatabaseError
+from sqlite3 import connect, Error, DatabaseError
 import functools
 
-with_db_connection = __import__('1-with_db_connection').with_db_connection
+def with_db_connection(func):
+    @functools.wraps(func)
+    def wrapper_db_connection(*args, **kwargs):
+        # Open Database Connection
+        conn = None
+        try:
+            conn = connect('alx.sqlite')
+            return func(conn, *args, **kwargs)
+        except Error as e:
+            raise Exception(f"Database Connection Failed - {e}")
+        finally:
+            # Close Database Connection
+            if conn is not None:
+                conn.close()
+    return wrapper_db_connection
 
 def transactional(func):
     @functools.wraps(func)
