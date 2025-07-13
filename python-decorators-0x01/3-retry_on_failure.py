@@ -6,7 +6,7 @@ import functools
 
 with_db_connection = __import__('1-with_db_connection').with_db_connection
 
-def retry_on_failure(retries=3, delay=1):
+def retry_on_failure(_func=None, retries=3, delay=1):
     def decorator_retry_on_failure(func):
         @functools.wraps(func)
         def wrapper_retry_on_failure(*args, **kwargs):
@@ -18,13 +18,15 @@ def retry_on_failure(retries=3, delay=1):
                         raise
                     # print('retrying in 1s') #It works!
                     time.sleep(delay)
-
         return wrapper_retry_on_failure
-    return decorator_retry_on_failure
+    if _func is None:
+        return decorator_retry_on_failure
+    else:
+        return decorator_retry_on_failure(_func)
 
 
 @with_db_connection
-@retry_on_failure(retries=3, delay=1)
+@retry_on_failure()
 def fetch_users_with_retry(conn):
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM users")
