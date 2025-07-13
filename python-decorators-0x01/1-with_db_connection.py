@@ -10,7 +10,7 @@ def with_db_connection(func):
         # Open Database Connection
         conn = None
         try:
-            conn = connect('alx.sqlite')
+            conn = connect('users.db')
             return func(conn, *args, **kwargs)
         except Error as e:
             raise Exception(f"Database Connection Failed - {e}")
