@@ -26,7 +26,7 @@ def retry_on_failure(_func=None, retries=3, delay=1):
 
 
 @with_db_connection
-@retry_on_failure()
+@retry_on_failure(retries=3, delay=1)
 def fetch_users_with_retry(conn):
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM users")
