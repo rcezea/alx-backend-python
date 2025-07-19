@@ -10,7 +10,6 @@ from parameterized import parameterized
 from fixtures import TEST_PAYLOAD
 
 
-
 class TestGithubOrgClient(unittest.TestCase):
     """ Test Class to unit test GithubOrgClient class methods """
 
@@ -20,17 +19,21 @@ class TestGithubOrgClient(unittest.TestCase):
     ])
     @patch('client.get_json')
     def test_org(self, org, mock):
-        """ Test that GithubOrgClient.org returns correct payload and get_json is called with correct url """
+        """ Test that GithubOrgClient.org returns correct payload
+        and get_json is called with correct url """
+
         mock.return_value = {"payload": True}
         obj = GithubOrgClient(org)
         result = obj.org
-        mock.assert_called_once_with('https://api.github.com/orgs/{}'.format(org))
+        mock.assert_called_once_with(f'https://api.github.com/orgs/{org}')
         self.assertEqual(result, {"payload": True})
 
     def test_public_repos_url(self):
         """ method to unit-test GithubOrgClient._public_repos_url """
-        with patch.object(GithubOrgClient, 'org', new_callable=PropertyMock) as mock:
-            mock.return_value = {'repos_url': 'https://api.github.com/orgs/google/repos'}
+        with patch.object(GithubOrgClient, 'org',
+                          new_callable=PropertyMock) as mock:
+            url = 'https://api.github.com/orgs/google/repos'
+            mock.return_value = {'repos_url': url}
             obj = GithubOrgClient('google')
             result = obj._public_repos_url
             self.assertEqual(result, mock.return_value['repos_url'])
@@ -40,7 +43,8 @@ class TestGithubOrgClient(unittest.TestCase):
         """"""
         mock_get.return_value = [{"name": 'org-repo'}]
 
-        with patch.object(GithubOrgClient, '_public_repos_url', new_callable=PropertyMock) as mock:
+        with patch.object(GithubOrgClient, '_public_repos_url',
+                          new_callable=PropertyMock) as mock:
             mock.return_value = 'mocked_url'
 
             obj = GithubOrgClient('org')
