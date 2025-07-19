@@ -9,7 +9,7 @@ from fixtures import TEST_PAYLOAD
 
 
 class TestGithubOrgClient(unittest.TestCase):
-    """"""
+    """ Test Class to unit test GithubOrgClient class methods """
 
     @parameterized.expand([
         'google',
