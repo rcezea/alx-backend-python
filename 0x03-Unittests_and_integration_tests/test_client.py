@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+"""
+Test Module for GitHubOrgClient
+"""
 
 import unittest
 from unittest.mock import patch, PropertyMock
