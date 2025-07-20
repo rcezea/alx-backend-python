@@ -1,3 +1,5 @@
+import uuid
+
 from django.db.models import Model, UUIDField, CharField, DateTimeField, ForeignKey, CASCADE, TextField, TextChoices
 from django.utils import timezone
 
@@ -12,7 +14,7 @@ class RoleChoices(TextChoices):
 
 class User(Model):
     """ User Table """
-    user_id = UUIDField(primary_key=True, db_index=True)
+    user_id = UUIDField(primary_key=True, db_index=True, default=uuid.uuid4, editable=False)
     first_name = CharField(max_length=256, null=False)
     last_name = CharField(max_length=256, null=False)
     email = CharField(max_length=256, null=False, unique=True)
@@ -24,7 +26,7 @@ class User(Model):
 
 class Message(Model):
     """ Message Table """
-    message_id = UUIDField(primary_key=True)
+    message_id = UUIDField(primary_key=True, db_index=True, default=uuid.uuid4, editable=False)
     sender_id = ForeignKey(User, on_delete=CASCADE)
     message_body = TextField(null=False)
     sent_at = DateTimeField(default=timezone.now)
@@ -32,7 +34,7 @@ class Message(Model):
 
 class Conversation(Model):
     """ Conversation Table """
-    conversation_id = UUIDField(primary_key=True, db_index=True)
+    conversation_id = UUIDField(primary_key=True, db_index=True, default=uuid.uuid4, editable=False)
     participants_id = ForeignKey(User, on_delete=CASCADE)
     created_at = DateTimeField(default=timezone.now)
 
