@@ -3,6 +3,8 @@ from .models import User, Conversation, Message
 
 class UserSerializer(serializers.ModelSerializer):
     full_name = serializers.SerializerMethodField()
+    phone_number = serializers.CharField(required=False, allow_blank=True)
+
     class Meta:
         model = User
         exclude = ['password_hash', 'created_at', 'first_name', 'last_name']
@@ -14,6 +16,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class MessageSerializer(serializers.ModelSerializer):
     sender_name = serializers.SerializerMethodField()
+
     class Meta:
         model = Message
         exclude = ['sender', 'conversation']
@@ -24,6 +27,7 @@ class MessageSerializer(serializers.ModelSerializer):
 
 class ConversationSerializer(serializers.ModelSerializer):
     messages = MessageSerializer(many=True, read_only=True)
+
     class Meta:
         model = Conversation
         fields = '__all__'
