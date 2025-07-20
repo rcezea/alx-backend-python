@@ -17,3 +17,8 @@ class ConversationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Conversation
         fields = '__all__'
+
+    def validate_participants_id(self, value):
+        if not value:
+            raise serializers.ValidationError("At least one participant is required.")
+        return value
