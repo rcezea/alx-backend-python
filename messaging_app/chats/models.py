@@ -36,5 +36,5 @@ class Message(Model):
 class Conversation(Model):
     """ Conversation Table """
     conversation_id = UUIDField(primary_key=True, db_index=True, default=uuid.uuid4, editable=False)
-    participants_id = ManyToManyField(User, related_name='conversations')
+    participants = ManyToManyField(User, related_name='conversations')
     created_at = DateTimeField(default=timezone.now)
