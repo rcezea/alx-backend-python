@@ -1,6 +1,6 @@
 import uuid
 
-from django.db.models import Model, UUIDField, CharField, DateTimeField, ForeignKey, CASCADE, TextField, TextChoices
+from django.db.models import Model, UUIDField, CharField, DateTimeField, ForeignKey, CASCADE, TextField, TextChoices, ManyToManyField
 from django.utils import timezone
 
 
@@ -28,6 +28,7 @@ class Message(Model):
     """ Message Table """
     message_id = UUIDField(primary_key=True, db_index=True, default=uuid.uuid4, editable=False)
     sender_id = ForeignKey(User, on_delete=CASCADE)
+    conversation_id = ForeignKey('Conversation', on_delete=CASCADE, related_name='messages')
     message_body = TextField(null=False)
     sent_at = DateTimeField(default=timezone.now)
 
@@ -35,6 +36,5 @@ class Message(Model):
 class Conversation(Model):
     """ Conversation Table """
     conversation_id = UUIDField(primary_key=True, db_index=True, default=uuid.uuid4, editable=False)
-    participants_id = ForeignKey(User, on_delete=CASCADE)
+    participants_id = ManyToManyField(User, related_name='conversations')
     created_at = DateTimeField(default=timezone.now)
-
