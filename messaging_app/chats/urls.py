@@ -2,6 +2,7 @@ from django.urls import path, include
 from rest_framework_nested.routers import NestedDefaultRouter
 from .views import MessageViewSet, UserViewSet, ConversationViewSet
 from rest_framework import routers
+from django.contrib import admin
 
 
 router = routers.DefaultRouter()
@@ -15,6 +16,7 @@ conversation_router.register('messages', MessageViewSet, basename='conversation-
 
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
     path('', include(router.urls)),
     path('', include(conversation_router.urls)),  # <-- Include nested URLs
 
