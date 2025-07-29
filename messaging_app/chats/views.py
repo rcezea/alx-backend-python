@@ -46,6 +46,8 @@ class MessageViewSet(viewsets.ModelViewSet):
         data = request.data.copy()
         data['sender'] = str(request.user.pk)
         # or `request.user.id`
+        if request.user is None:
+            return Response(status=status.HTTP_403_FORBIDDEN)
 
         # Check and Create New Conversation IF NOT EXISTS
         """if not data.get('conversation_id'):
@@ -58,13 +60,6 @@ class MessageViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-    def get_permissions(self):
-        if self.request.method in ['GET']:
-            return [IsAuthenticated(), IsParticipantOfConversation()]
-        elif self.request.method in ['PUT', 'PATCH', 'DELETE']:
-            return [IsSenderOfMessage()]
-        return [IsAuthenticated()]
 
 
 class ConversationViewSet(viewsets.ModelViewSet):
@@ -96,8 +91,3 @@ class ConversationViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(conversation)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-    def get_permissions(self):
-        if self.request.method in ['GET', 'PUT', 'PATCH', 'DELETE']:
-            return [IsAuthenticated(), IsParticipantOfConversation()]
-        return [IsAuthenticated()]
