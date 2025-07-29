@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import User, Conversation, Message
+from django.contrib.auth.models import AbstractUser
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -22,11 +23,7 @@ class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
         fields = '__all__'
-        read_only_fields = ['message_id', 'sent_at', 'sender_name']
-
-    def get_sender_name(self, obj):
-        return f"{obj.sender.first_name} {obj.sender.last_name}"\
-            if obj.sender else None
+        read_only_fields = ['message_id', 'sent_at', 'sender']
 
     def __init__(self, *args, **kwargs):
         fields = kwargs.pop('fields', None)  # Accept a 'fields' kwarg
@@ -37,14 +34,29 @@ class MessageSerializer(serializers.ModelSerializer):
             for field in set(self.fields) - set(fields):
                 self.fields.pop(field)
 
+    def get_sender_name(self, obj):
+        return f"{obj.sender.first_name} {obj.sender.last_name}"\
+            if obj.sender else None
+
+    def validate_sender(self, value):
+        request = self.context.get('request')
+        if request and value != request.user:
+            raise serializers.ValidationError(
+                f"You can only send messages as {request.user}.")
+        return value
+
 
 class ConversationSerializer(serializers.ModelSerializer):
     messages = serializers.SerializerMethodField()
+    participants = serializers.PrimaryKeyRelatedField(
+        many=True,
+        queryset=User.objects.all()
+    )
 
     class Meta:
         model = Conversation
-        fields = '__all__'
-        read_only_fields = ['conversation_id', 'created_at']
+        fields = ['conversation_id', 'created_at', 'messages', 'participants']
+        read_only_fields = ['created_at']
 
     def get_messages(self, obj):
         messages = obj.messages.all()
