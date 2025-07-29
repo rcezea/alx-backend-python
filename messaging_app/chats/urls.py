@@ -11,12 +11,13 @@ router.register('messages', MessageViewSet, basename='message')
 router.register('conversations', ConversationViewSet, basename='conversation')
 
 # Nested router: messages under conversations
-conversation_router = NestedDefaultRouter(router, 'conversations', lookup='conversation')
-conversation_router.register('messages', MessageViewSet, basename='conversation-messages')
+conversation_router = NestedDefaultRouter(router, 'conversations',
+                                          lookup='conversation')
+conversation_router.register('messages', MessageViewSet,
+                             basename='conversation-messages')
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('', include(router.urls)),
     path('', include(conversation_router.urls)),  # <-- Include nested URLs
 
