@@ -3,6 +3,7 @@ Module for DRF API Views
 """
 
 from rest_framework import viewsets, status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .models import Message, Conversation, User, ConversationParticipant
 from .serializers import (MessageSerializer, UserSerializer,
@@ -60,8 +61,10 @@ class MessageViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.request.method in ['GET']:
+            return [IsAuthenticated(), IsParticipantOfConversation()]
+        elif self.request.method in ['PUT', 'PATCH', 'DELETE']:
             return [IsSenderOfMessage()]
-        return super().get_permissions()
+        return [IsAuthenticated()]
 
 
 class ConversationViewSet(viewsets.ModelViewSet):
@@ -93,3 +96,8 @@ class ConversationViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(conversation)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def get_permissions(self):
+        if self.request.method in ['GET', 'PUT', 'PATCH', 'DELETE']:
+            return [IsAuthenticated(), IsParticipantOfConversation()]
+        return [IsAuthenticated()]
