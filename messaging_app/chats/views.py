@@ -10,6 +10,7 @@ from .serializers import (MessageSerializer, UserSerializer,
                           ConversationSerializer)
 from django_filters import rest_framework as filters
 from chats.permissions import IsSenderOfMessage, IsParticipantOfConversation
+from chats.filters import MessageFilter
 
 
 # Create your views here.
@@ -31,10 +32,11 @@ class UserViewSet(viewsets.ModelViewSet):
 class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
+    filterset_class = MessageFilter
 
     def get_queryset(self):
         return Message.objects.filter(
-            conversation_id__participants=self.request.user)
+            conversation_id__participants=self.request.user).all()
 
     def perform_create(self, serializer):
         message = serializer.save(sender=self.request.user)
