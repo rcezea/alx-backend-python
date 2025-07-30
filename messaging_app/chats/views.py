@@ -11,6 +11,7 @@ from .serializers import (MessageSerializer, UserSerializer,
 from django_filters import rest_framework as filters
 from chats.permissions import IsSenderOfMessage, IsParticipantOfConversation
 from chats.filters import MessageFilter
+from chats.pagination import MessagePagination
 
 
 # Create your views here.
@@ -33,6 +34,7 @@ class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
     filterset_class = MessageFilter
+    pagination_class = MessagePagination
 
     def get_queryset(self):
         return Message.objects.filter(
