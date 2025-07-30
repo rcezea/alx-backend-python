@@ -1,0 +1,82 @@
+{
+	"info": {
+		"_postman_id": "39926d56-055c-4358-8ee4-9c3cbd597804",
+		"name": "Messaging App",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "36640024"
+	},
+	"item": [
+		{
+			"name": "Get Token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"root\",\n    \"password\": \"toor\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "127.0.0.1:8000/api/token/"
+			},
+			"response": []
+		},
+		{
+			"name": "Refresh Token",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "refresh",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc1MzkwNzMxOCwiaWF0IjoxNzUzODIwOTE4LCJqdGkiOiJjN2NiNDY2NTNhOWI0MGRmYjUwYWI3YmY3OWY5ZTczZSIsInVzZXJfaWQiOiI0YjAwZGM2NS1kNzc4LTQxYjgtODEzZS1hYzUxYmM4YTVlNTkifQ.149KdNazHqwk4_oOMyXJVWRV8PHZgTBWly8GHTU2XMA",
+							"type": "text"
+						}
+					]
+				},
+				"url": "127.0.0.1:8000/api/token/refresh/"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Messages",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Get Conversations",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzUzODMyNDI3LCJpYXQiOjE3NTM4MzA2MjcsImp0aSI6IjhlNjRhMzk1ZTg5MjRhYzZiZGEwYTQzYjJmYjkzNWY5IiwidXNlcl9pZCI6IjRiMDBkYzY1LWQ3NzgtNDFiOC04MTNlLWFjNTFiYzhhNWU1OSJ9.FXAPs6dUTnIsVaOqXrbGA1Iga7tW1WM7C-OjkbyD6Yg"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"participants\": []\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "127.0.0.1:8000/api/conversations/"
+			},
+			"response": []
+		}
+	]
+}
