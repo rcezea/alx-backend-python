@@ -56,7 +56,6 @@ class OffensiveLanguageMiddleware:
     def __call__(self, request):
         if request.method == 'POST' and request.path == '/api/messages/':
             ip_addr = get_client_ip(request)
-            pprint(ip_addr)
             if not self.record.get(ip_addr):
                 self.record[ip_addr] = {
                     'time': datetime.now(),
