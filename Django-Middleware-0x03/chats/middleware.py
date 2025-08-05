@@ -63,7 +63,6 @@ class OffensiveLanguageMiddleware:
                     'count': 0,
                 }
             user = self.record.get(ip_addr)
-            pprint(f'User Detail: {user}')
 
             clock = datetime.now()
             diff = clock - user['time']
@@ -80,7 +79,8 @@ class OffensiveLanguageMiddleware:
                         status=status.HTTP_403_FORBIDDEN)
             else:
                 user['count'] = 1
-        pprint(f'Records: {self.record}')
+                user['time'] = datetime.now()
+
         response = self.get_response(request)
         return response
 
