@@ -70,7 +70,7 @@ class OffensiveLanguageMiddleware:
             # minutes = total_minutes % 60
             # seconds = int(diff.total_seconds() % 60)
 
-            if diff.total_seconds() // 60 <= 10:
+            if (diff.total_seconds()) // 60 <= 10:
                 user['count'] += 1
                 if user['count'] > 5:
                     return JsonResponse(
@@ -91,3 +91,20 @@ def get_client_ip(request):
     else:
         ip = request.META.get('REMOTE_ADDR')
     return ip
+
+
+class RolepermissionMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        if request.method == 'POST' and not request.path.startswith('/admin/'):
+            allowed_roles = ['admin', 'moderator']
+
+            if request.user.role.lower not in allowed_roles:
+                return JsonResponse(
+                    data={"error": "You do not the required permission set."},
+                    status=status.HTTP_403_FORBIDDEN)
+
+        response = self.get_response(request)
+        return response
