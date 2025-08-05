@@ -2,6 +2,8 @@
 Custom Middleware for Chats App
 """
 from datetime import datetime, time
+from ipaddress import ip_address
+
 from django.core.exceptions import PermissionDenied
 from django.http import JsonResponse
 from rest_framework import status
@@ -33,10 +35,60 @@ class RestrictAccessByTimeMiddleware:
 
     def __call__(self, request):
         current_time = datetime.now().hour
-        if current_time >= 12 or current_time < 6:
+        if current_time >= 21 or current_time < 6:
             return JsonResponse(
                 data={"error": "You do not have access at this time."},
                 status=status.HTTP_403_FORBIDDEN)
         else:
             response = self.get_response(request)
             return response
+
+
+class OffensiveLanguageMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+        self.record = {
+
+        }
+        self.message_count = 0
+        self.start_time = datetime.now()
+
+    def __call__(self, request):
+        if request.method == 'POST' and request.path == '/api/messages/':
+            ip_addr = get_client_ip(request)
+            pprint(ip_addr)
+            if not self.record.get(ip_addr):
+                self.record[ip_addr] = {
+                    'time': datetime.now(),
+                    'count': 0,
+                }
+            user = self.record.get(ip_addr)
+            pprint(f'User Detail: {user}')
+
+            clock = datetime.now()
+            diff = clock - user['time']
+            # total_minutes = diff.total_seconds() // 60
+            # hours = total_minutes // 60
+            # minutes = total_minutes % 60
+            # seconds = int(diff.total_seconds() % 60)
+
+            if diff.total_seconds() // 60 <= 10:
+                user['count'] += 1
+                if user['count'] > 5:
+                    return JsonResponse(
+                        data={"error": "Message Limit Reached."},
+                        status=status.HTTP_403_FORBIDDEN)
+            else:
+                user['count'] = 1
+        pprint(f'Records: {self.record}')
+        response = self.get_response(request)
+        return response
+
+
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[-1].strip()
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
