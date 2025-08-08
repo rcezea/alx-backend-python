@@ -11,11 +11,20 @@ class Message(models.Model):
     receiver = models.ForeignKey(User, related_name='receiver', null=False, on_delete=models.CASCADE)
     content = models.TextField()
     timestamp = models.DateTimeField(default=timezone.now)
+    edited = models.BooleanField(default=False)
+
 
     def __str__(self):
         return f"{self.content[:10]}..."
+
 
 class Notification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     message = models.ForeignKey(Message, on_delete=models.CASCADE)
     read = models.BooleanField(default=False)
+
+
+
+class MessageHistory(models.Model):
+    message = models.ForeignKey(Message, on_delete=models.CASCADE)
+    version = models.IntegerField(null=True)
