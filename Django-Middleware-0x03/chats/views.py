@@ -76,7 +76,6 @@ class ConversationViewSet(viewsets.ModelViewSet):
         return Conversation.objects.filter(participants=self.request.user)
 
     def create(self, request, *args, **kwargs):
-
         participants = request.data.get("participants", [])
         if isinstance(participants, str):
             participants = request.data.getlist("participants")
