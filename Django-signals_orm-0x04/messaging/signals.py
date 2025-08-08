@@ -15,7 +15,8 @@ def create_notification(instance, created, **kwargs):
 @receiver(pre_save, sender=Message)
 def log_message_history(instance, **kwargs):
     obj = Message.objects.get(id=instance.id)
-    latest_version = (MessageHistory.objects.filter(message=instance.id).last())
+    latest_version = (MessageHistory.objects.
+                      filter(message=instance.id).last())
     latest_version = latest_version.version or 0
 
     MessageHistory.objects.create(
